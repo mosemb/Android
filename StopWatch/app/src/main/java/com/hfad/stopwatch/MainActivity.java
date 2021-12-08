@@ -13,13 +13,70 @@ public class MainActivity extends AppCompatActivity {
 
     private int seconds;
     private boolean running;
+    private boolean wasRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(savedInstanceState!=null){  // Saves the state to the device even if its rotated. It continues to run
+            seconds = savedInstanceState.getInt("seconds");
+            running = savedInstanceState.getBoolean("running");
+            wasRunning = savedInstanceState.getBoolean("wasRunning");
+
+        }
         runTimer();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {  // Saves the state of the device even if its rotated.
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("seconds", seconds);
+        savedInstanceState.putBoolean("running", running);
+        savedInstanceState.putBoolean("wasRunning",wasRunning);
+    }
+
+
+    /*
+    @Override
+    public void onStop() {
+        super.onStop();
+        wasRunning = running;
+        running = false;
+    }
+
+
+    @Override
+    public void onStart() {
+
+        super.onStart();
+        if(wasRunning){
+            running = true;
+        }
+       // wasRunning = running;
+    }
+
+     */
+    @Override
+    public void onPause() {
+
+        super.onPause();
+        wasRunning = running;
+        running = false;
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        if(wasRunning){
+
+            running = true;
+        }
+    }
+
+
+
 
     public void onClickStart(View view){
         running = true;
