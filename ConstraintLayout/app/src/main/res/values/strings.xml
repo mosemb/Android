@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Constraint Layout</string>
+    <string name ="to_lable">To:</string>
+    <string name = "email_hint">Email address </string>
+    <string name = "message_hint">Message</string>
+    <string name = "send_button">Send</string>
+    <string name="subject_hint">Subject</string>
+
+
+</resources>
