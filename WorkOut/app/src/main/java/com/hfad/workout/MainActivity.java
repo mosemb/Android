@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WorkOutListFragment.Listener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +20,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,DetailActivity.class);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void itemClicked(long id) {
+        Intent intent = new Intent(this,DetailActivity.class);
+        intent.putExtra(DetailActivity.EXTRA_WORKOUT_ID, (int) id);
+        startActivity(intent);
     }
 }

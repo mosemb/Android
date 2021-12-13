@@ -19,5 +19,17 @@ public class Workout {
             new Workout("Strength and Length", "500 meter run \n 21 x 1.5 pood kettle ball \n21xpull-ups")
     };
 
+    public String getDescription(){
+        return description;
+    }
 
+    public String getName(){
+        return name;
+    }
+
+    public String toString(){
+        return this.name;
+    }
+
+    
 }
