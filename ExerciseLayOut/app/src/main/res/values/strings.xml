@@ -3,4 +3,5 @@
     <string name = "hint">Enter query to search</string>
     <string name = "url_text">Url will show up when you click search</string>
     <string name = "makesearch">Make search </string>
+    <string name = "search"> Search string </string>
 </resources>
