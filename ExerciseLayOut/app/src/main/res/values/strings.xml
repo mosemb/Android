@@ -4,4 +4,5 @@
     <string name = "url_text">Url will show up when you click search</string>
     <string name = "makesearch">Make search </string>
     <string name = "search"> Search string </string>
+    <string name="error">Sorry an Error Occured </string>
 </resources>
