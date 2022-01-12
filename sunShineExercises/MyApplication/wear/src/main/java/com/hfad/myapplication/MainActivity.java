@@ -10,6 +10,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +22,12 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.database.ServerValue;
 import com.hfad.myapplication.databinding.ActivityMainBinding;
+
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -33,6 +39,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private Button mStartButton;
     private Button mStopButton;
     private static final int BODY_SENSOR = 21;
+    private DAODBHeartRate daodbHeartRate;
 
 
     @Override
@@ -49,6 +56,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 
 
+
+
+
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BODY_SENSORS) == PackageManager.PERMISSION_GRANTED) {
 
             mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -59,17 +69,17 @@ public class MainActivity extends Activity implements SensorEventListener {
                 mStopButton.setVisibility(Button.VISIBLE);
                 //mHeartTextView.setText(mHeartRateSensor.getName());
 
-                startMeasure();
+                registerSensor();
             });
 
             mStopButton.setOnClickListener(v -> {
                 mStopButton.setVisibility(Button.GONE);
                 mStartButton.setVisibility(Button.VISIBLE);
 
-                stopMeasure();
+                unRegisterSensor();
             });
 
-            Toast.makeText(this, "Permision Granted",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Permision Granted 1",Toast.LENGTH_LONG).show();
 
 
         }else if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.BODY_SENSORS)){
@@ -113,7 +123,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 
 
-    private void startMeasure() {
+    private void registerSensor() {
 
         boolean sensorRegistered = mSensorManager.registerListener(this, mHeartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
         Log.d("Sensor Status:", " Sensor registered: " + (sensorRegistered ? "yes" : "no"));
@@ -129,7 +139,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 
-    private void stopMeasure() {
+    private void unRegisterSensor() {
         mSensorManager.unregisterListener(this);
     }
 
@@ -142,6 +152,19 @@ public class MainActivity extends Activity implements SensorEventListener {
         Log.d("Sensor Status:", " Sensor registered: " + mHeartRate);
 
          mTextView.setText(Integer.toString(mHeartRate));
+
+
+
+         DBHeartRate dbHeartRate = new DBHeartRate(mHeartRate, ServerValue.TIMESTAMP);
+         daodbHeartRate = new DAODBHeartRate();
+         daodbHeartRate.insert(dbHeartRate).addOnSuccessListener(suc->{
+
+             Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+             
+         }).addOnFailureListener(err->{
+             Toast.makeText(this, err.getMessage(), Toast.LENGTH_SHORT).show();
+         });
+
 
         if(mHeartRateSensor.getName()!=null){
             mHeartTextView.setText(mHeartRateSensor.getName());
